@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "monitor.thread",
+      "type": "io.github.lyrric.core.ThreadPoolMonitorProperties",
+      "sourceType": "io.github.lyrric.core.ThreadPoolMonitorProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "monitor.thread.pool",
+      "type": "java.util.List<io.github.lyrric.core.ThreadPoolMonitorProperties$threadPoolConfig>",
+      "sourceType": "io.github.lyrric.core.ThreadPoolMonitorProperties"
+    }
+  ],
+  "hints": []
+}
