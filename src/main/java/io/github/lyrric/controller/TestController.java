@@ -5,6 +5,7 @@ import io.github.lyrric.core.ThreadPoolExecutorDecorator;
 import io.github.lyrric.task.MyTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,12 +19,11 @@ public class TestController {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-    private final AtomicInteger num = new AtomicInteger(0);
 
     ExecutorService threadPoolExecutor = ThreadPoolExecutorDecorator.builder()
             .corePoolSize(5)
             .maximumPoolSize(20)
-            .key("threadPool.test")
+            .key("test")
             .name("测试线程")
             .keepAliveTime(30)
             .unit(TimeUnit.SECONDS)
@@ -35,7 +35,7 @@ public class TestController {
     @ResponseBody
     public String test(@PathVariable final Integer count, @PathVariable final long sleepTime) {
         for (int i = 0; i < count; i++) {
-            threadPoolExecutor.submit(new MyTask(sleepTime, num.get()));
+            threadPoolExecutor.submit(new MyTask(sleepTime));
         }
         return "success";
     }

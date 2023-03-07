@@ -3,6 +3,7 @@ package io.github.lyrric.core;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Consumer;
@@ -10,7 +11,7 @@ import java.util.function.Consumer;
 
 public class ThreadPoolExecutorMonitor {
 
-    private static Map<String, ThreadPoolExecutor> threadPoolExecutors = new ConcurrentHashMap<>();
+    private static final Map<String, ThreadPoolExecutor> threadPoolExecutors = new ConcurrentHashMap<>();
     /**
      * 日志存储器
      */
@@ -23,13 +24,6 @@ public class ThreadPoolExecutorMonitor {
 
     public static void add(String key, ThreadPoolExecutor threadPoolExecutor) {
         threadPoolExecutors.put(key, threadPoolExecutor);
-    }
-
-    /**
-     * 监听配置变化
-     */
-    public void listen(){
-
     }
 
     /**
@@ -52,4 +46,17 @@ public class ThreadPoolExecutorMonitor {
     }
 
 
+  public static void reConfigThreadPool(ThreadPoolMonitorProperties properties){
+      properties.getPool().forEach(poolProperties->{
+          Optional.ofNullable(threadPoolExecutors.get(poolProperties.getKey()))
+                  .ifPresent(threadPool->{
+                      if (threadPool.getCorePoolSize() != poolProperties.getCorePoolSize()) {
+                          threadPool.setCorePoolSize(poolProperties.getCorePoolSize());
+                      }
+                      if (threadPool.getMaximumPoolSize() != poolProperties.getMaximumPoolSize()) {
+                          threadPool.setMaximumPoolSize(poolProperties.getMaximumPoolSize());
+                      }
+                  });
+      });
+  }
 }

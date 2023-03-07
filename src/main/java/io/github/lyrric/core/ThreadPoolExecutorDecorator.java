@@ -1,12 +1,9 @@
 package io.github.lyrric.core;
 
 import java.util.concurrent.*;
-import java.util.function.Consumer;
 
 
 public class ThreadPoolExecutorDecorator extends ThreadPoolExecutor {
-
-
     /**
      * 配置中心的key
      */
@@ -31,18 +28,4 @@ public class ThreadPoolExecutorDecorator extends ThreadPoolExecutor {
         return name;
     }
 
-    @Override
-    public Future<?> submit(Runnable task) {
-        return super.submit(task);
-    }
-
-    @Override
-    public <T> Future<T> submit(Runnable task, T result) {
-        return super.submit(task, result);
-    }
-
-    @Override
-    public <T> Future<T> submit(Callable<T> task) {
-        return super.submit(task);
-    }
 }

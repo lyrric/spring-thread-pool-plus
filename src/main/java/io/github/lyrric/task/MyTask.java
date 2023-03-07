@@ -1,19 +1,11 @@
 package io.github.lyrric.task;
 
-import io.github.lyrric.Application;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class MyTask implements Runnable{
-
-    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     private final long sleepTime;
 
-    private final int num;
-    public MyTask(long sleepTime, int num) {
+    public MyTask(long sleepTime) {
         this.sleepTime = sleepTime;
-        this.num = num;
     }
 
     @Override

@@ -1,0 +1,7 @@
+#monitor:
+#  thread:
+#    pool:
+#      - name: hello
+#        key: test
+#        core-pool-size: 5
+#        maximum-pool-size: 12
