@@ -3,5 +3,8 @@
 #    pool:
 #      - name: hello
 #        key: test
+#        queue-size: 20
+#        wait-timeout: 2000
+#        exec-timeout: 5000
 #        core-pool-size: 5
 #        maximum-pool-size: 12

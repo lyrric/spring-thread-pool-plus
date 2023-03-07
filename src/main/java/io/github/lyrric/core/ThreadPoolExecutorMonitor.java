@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class ThreadPoolExecutorMonitor {
 
-    private static final Map<String, ThreadPoolExecutor> threadPoolExecutors = new ConcurrentHashMap<>();
+    private static final Map<String, ThreadPoolExecutorDecorator> threadPoolExecutors = new ConcurrentHashMap<>();
     /**
      * 日志存储器
      */
@@ -22,7 +22,7 @@ public class ThreadPoolExecutorMonitor {
     }
 
 
-    public static void add(String key, ThreadPoolExecutor threadPoolExecutor) {
+    public static void add(String key, ThreadPoolExecutorDecorator threadPoolExecutor) {
         threadPoolExecutors.put(key, threadPoolExecutor);
     }
 
@@ -32,15 +32,19 @@ public class ThreadPoolExecutorMonitor {
     @Scheduled(cron = "0/5 * * * * *")
     public void task(){
         threadPoolExecutors.values().stream().map(executor -> {
-            String name = ((ThreadPoolExecutorDecorator) executor).getName();
-            return "Thread pool"
-                    + " name:" + name
-                    + " activeCount:" + executor.getActiveCount()
-                    + " poolSize:" + executor.getPoolSize()
-                    + " queueSize:" + executor.getQueue().size()
-                    + " completedTaskCount:" + executor.getCompletedTaskCount()
-                    + " coreSize:" + executor.getCorePoolSize()
-                    + " maxSize:" + executor.getMaximumPoolSize();
+            String name = executor.getName();
+            return name+"-Thread-Pool"
+                    + ", activeCount:" + executor.getActiveCount()
+                    + ", poolSize:" + executor.getPoolSize()
+                    + ", queueSize:" + executor.getQueue().size()
+                    + ", completedTaskCount:" + executor.getCompletedTaskCount()
+                    + ", queueFullWarning:" + executor.getQueueFullWarning()
+                    + ", waitTimeoutCount:" + executor.getWaitTimeoutCount()
+                    + ", execTimeoutCount:" + executor.getExecTimeoutCount()
+                    + ", totalExecTime:" + executor.getTotalExecTime()
+                    + ", totalWaitTime:" + executor.getTotalWaitTime()
+                    + ", coreSize:" + executor.getCorePoolSize()
+                    + ", maxSize:" + executor.getMaximumPoolSize();
 
         }).forEach(logDataConsumer);
     }

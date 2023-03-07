@@ -4,10 +4,20 @@ import java.util.concurrent.*;
 
 public class ThreadPoolExecutorDecoratorBuilder {
 
+    /** 线程池唯一标识 */
     private String key;
+    /** 线程池名称 */
     private String name;
-    private int corePoolSize;
-    private int maximumPoolSize;
+    /** 任务队列长度阈值 */
+    private int queueSize;
+    /** 任务等待时长阈值，单位毫秒 */
+    private long waitTimeout;
+    /** 任务执行时间阈值，单位毫秒 */
+    private long execTimeout;
+    /** 核心线程池数量 */
+    private Integer corePoolSize;
+    /** 最大线程池数量 */
+    private Integer maximumPoolSize;
     private long keepAliveTime;
     private TimeUnit unit;
     private BlockingQueue<Runnable> workQueue;
@@ -49,6 +59,21 @@ public class ThreadPoolExecutorDecoratorBuilder {
         return this;
     }
 
+    public ThreadPoolExecutorDecoratorBuilder queueSize(int queueSize) {
+        this.queueSize = queueSize;
+        return this;
+    }
+
+    public ThreadPoolExecutorDecoratorBuilder waitTimeout(long waitTimeout) {
+        this.waitTimeout = waitTimeout;
+        return this;
+    }
+
+    public ThreadPoolExecutorDecoratorBuilder execTimeout(long execTimeout) {
+        this.execTimeout = execTimeout;
+        return this;
+    }
+
     public ThreadPoolExecutorDecoratorBuilder threadFactory(ThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
         return this;
@@ -60,7 +85,7 @@ public class ThreadPoolExecutorDecoratorBuilder {
     }
 
     public ThreadPoolExecutorDecorator build() {
-        return new ThreadPoolExecutorDecorator(key, name, corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+        return new ThreadPoolExecutorDecorator(key, name, queueSize, waitTimeout, execTimeout, corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
                 threadFactory == null ? Executors.defaultThreadFactory() : threadFactory,
                 handler == null ? defaultHandler : handler);
     }

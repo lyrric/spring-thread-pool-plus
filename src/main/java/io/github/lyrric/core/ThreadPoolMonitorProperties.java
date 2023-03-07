@@ -12,21 +12,19 @@ public class ThreadPoolMonitorProperties implements InitializingBean {
     private List<threadPoolConfig> pool = Collections.emptyList();
 
     public static class threadPoolConfig {
-        /**
-         * 线程池唯一标识
-         */
+        /** 线程池唯一标识 */
         private String key;
-        /**
-         * 线程池名称
-         */
+        /** 线程池名称 */
         private String name;
-        /**
-         * 核心线程池数量
-         */
+        /** 任务队列长度阈值 */
+        private int queueSize;
+        /** 任务等待时长阈值，单位毫秒 */
+        private long waitTimeout;
+        /** 任务执行时间阈值，单位毫秒 */
+        private long execTimeout;
+        /** 核心线程池数量 */
         private Integer corePoolSize;
-        /**
-         * 最大线程池数量
-         */
+        /** 最大线程池数量 */
         private Integer maximumPoolSize;
 
         public String getName() {
@@ -59,6 +57,30 @@ public class ThreadPoolMonitorProperties implements InitializingBean {
 
         public void setMaximumPoolSize(Integer maximumPoolSize) {
             this.maximumPoolSize = maximumPoolSize;
+        }
+
+        public int getQueueSize() {
+            return queueSize;
+        }
+
+        public void setQueueSize(int queueSize) {
+            this.queueSize = queueSize;
+        }
+
+        public long getWaitTimeout() {
+            return waitTimeout;
+        }
+
+        public void setWaitTimeout(long waitTimeout) {
+            this.waitTimeout = waitTimeout;
+        }
+
+        public long getExecTimeout() {
+            return execTimeout;
+        }
+
+        public void setExecTimeout(long execTimeout) {
+            this.execTimeout = execTimeout;
         }
     }
 
