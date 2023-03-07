@@ -44,19 +44,20 @@ public class ThreadPoolExecutorMonitor {
 
         }).forEach(logDataConsumer);
     }
-
-
   public static void reConfigThreadPool(ThreadPoolMonitorProperties properties){
-      properties.getPool().forEach(poolProperties->{
-          Optional.ofNullable(threadPoolExecutors.get(poolProperties.getKey()))
-                  .ifPresent(threadPool->{
-                      if (threadPool.getCorePoolSize() != poolProperties.getCorePoolSize()) {
-                          threadPool.setCorePoolSize(poolProperties.getCorePoolSize());
-                      }
-                      if (threadPool.getMaximumPoolSize() != poolProperties.getMaximumPoolSize()) {
-                          threadPool.setMaximumPoolSize(poolProperties.getMaximumPoolSize());
-                      }
-                  });
-      });
+        synchronized (ThreadPoolExecutorMonitor.class){
+            properties.getPool().forEach(poolProperties->{
+                Optional.ofNullable(threadPoolExecutors.get(poolProperties.getKey()))
+                        .ifPresent(threadPool->{
+                            if (threadPool.getCorePoolSize() != poolProperties.getCorePoolSize()) {
+                                threadPool.setCorePoolSize(poolProperties.getCorePoolSize());
+                            }
+                            if (threadPool.getMaximumPoolSize() != poolProperties.getMaximumPoolSize()) {
+                                threadPool.setMaximumPoolSize(poolProperties.getMaximumPoolSize());
+                            }
+                        });
+            });
+        }
+
   }
 }
