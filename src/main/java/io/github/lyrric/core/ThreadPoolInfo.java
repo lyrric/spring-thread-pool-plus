@@ -1,5 +1,7 @@
 package io.github.lyrric.core;
 
+import java.time.LocalDateTime;
+
 public class ThreadPoolInfo {
     /** 线程池唯一标识 */
     private String key;
@@ -9,8 +11,7 @@ public class ThreadPoolInfo {
     private Boolean queueFullWarning ;
     /** 任务队列使用数量 */
     private Integer queueUseSize ;
-    /** 队列总长度 */
-    private Integer queueTotalSize;
+
     /** 任务队列使用比例阈值 */
     private Double queueWarningRatio;
     /** 任务等待时间超过阈值的任务数量 */
@@ -25,26 +26,34 @@ public class ThreadPoolInfo {
     private Long totalWaitTime ;
     /** 任务平均等待总时长 */
     private Integer avgWaitTime ;
-    /** 核心线程池数量 */
-    private Integer corePoolSize;
-    /** 最大线程池数量 */
-    private Integer maximumPoolSize;
-
     /** 已完成任务 */
     private Long completedTaskCount;
     /** 当前活跃的线程数量 */
     private Integer activeCount;
 
+
+    /** 核心线程池数量 */
+    private Integer corePoolSize;
+    /** 最大线程池数量 */
+    private Integer maximumPoolSize;
+    /** 队列总长度 */
+    private Integer queueTotalSize;
+    /** 任务等待时长阈值，单位毫秒 */
+    private long waitTimeout;
+    /** 任务执行时间阈值，单位毫秒 */
+    private long execTimeout;
+    private LocalDateTime createTime;
+
     public ThreadPoolInfo() {
     }
 
 
-    public ThreadPoolInfo(String key, String name, Boolean queueFullWarning, Integer queueUseSize, Integer queueTotalSize, Double queueWarningRatio,
+    public ThreadPoolInfo(String key, String name, Integer queueUseSize, Integer queueTotalSize, Double queueWarningRatio,
                           Integer waitTimeoutCount, Integer execTimeoutCount, Long totalExecTime,Long totalWaitTime,
-                          Integer corePoolSize, Integer maximumPoolSize, Long completedTaskCount, Integer activeCount) {
+                          Integer corePoolSize, Integer maximumPoolSize, Long completedTaskCount, Integer activeCount,
+                          long waitTimeout, long execTimeout) {
         this.key = key;
         this.name = name;
-        this.queueFullWarning = queueFullWarning;
         this.waitTimeoutCount = waitTimeoutCount;
         this.execTimeoutCount = execTimeoutCount;
         this.totalExecTime = totalExecTime;
@@ -54,14 +63,16 @@ public class ThreadPoolInfo {
         }
         this.totalWaitTime = totalWaitTime;
         this.activeCount = activeCount;
-
         this.corePoolSize = corePoolSize;
         this.maximumPoolSize = maximumPoolSize;
         this.queueTotalSize = queueTotalSize;
         this.queueUseSize = queueUseSize;
         this.queueWarningRatio = queueWarningRatio;
+        this.queueFullWarning = queueUseSize > (queueTotalSize * queueWarningRatio);
         this.completedTaskCount = completedTaskCount;
-
+        this.waitTimeout = waitTimeout;
+        this.execTimeout = execTimeout;
+        this.createTime = LocalDateTime.now();
     }
 
     @Override
@@ -71,7 +82,6 @@ public class ThreadPoolInfo {
                 ", name='" + name + '\'' +
                 ", queueFullWarning=" + queueFullWarning +
                 ", queueUseSize=" + queueUseSize +
-                ", queueTotalSize=" + queueTotalSize +
                 ", queueWarningRatio=" + queueWarningRatio +
                 ", waitTimeoutCount=" + waitTimeoutCount +
                 ", execTimeoutCount=" + execTimeoutCount +
@@ -79,11 +89,14 @@ public class ThreadPoolInfo {
                 ", avgExecTime=" + avgExecTime +
                 ", totalWaitTime=" + totalWaitTime +
                 ", avgWaitTime=" + avgWaitTime +
+                ", completedTaskCount=" + completedTaskCount +
                 ", activeCount=" + activeCount +
                 ", corePoolSize=" + corePoolSize +
                 ", maximumPoolSize=" + maximumPoolSize +
-                ", completedTaskCount=" + completedTaskCount +
-
+                ", queueTotalSize=" + queueTotalSize +
+                ", waitTimeout=" + waitTimeout +
+                ", execTimeout=" + execTimeout +
+                ", createTime=" + createTime +
                 '}';
     }
 
@@ -213,5 +226,13 @@ public class ThreadPoolInfo {
 
     public void setActiveCount(Integer activeCount) {
         this.activeCount = activeCount;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }

@@ -1,4 +1,4 @@
-package io.github.lyrric.task;
+package io.github.lyrric.test;
 
 import java.util.Random;
 
@@ -7,7 +7,7 @@ public class MyTask implements Runnable{
     private final long sleepTime;
 
     public MyTask() {
-        this.sleepTime = (long) (new Random().nextDouble() * 10000);
+        this.sleepTime = (long) (new Random().nextDouble() * 1000*60);
     }
 
     @Override

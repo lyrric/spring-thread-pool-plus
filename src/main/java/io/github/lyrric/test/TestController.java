@@ -1,8 +1,7 @@
-package io.github.lyrric.controller;
+package io.github.lyrric.test;
 
 import io.github.lyrric.Application;
 import io.github.lyrric.core.ThreadPoolExecutorDecorator;
-import io.github.lyrric.task.MyTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,12 +33,13 @@ public class TestController {
             .build();
 
 
-    @GetMapping(value = "/test/{count}/{sleepTime}")
+    @GetMapping(value = "/test/{count}")
     @ResponseBody
-    public String test(@PathVariable final Integer count, @PathVariable final long sleepTime) {
+    public String test(@PathVariable final Integer count) {
         for (int i = 0; i < count; i++) {
             threadPoolExecutor.submit(new MyTask());
         }
         return "success";
     }
+
 }
