@@ -4,6 +4,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Consumer;
@@ -32,19 +34,11 @@ public class ThreadPoolExecutorMonitor {
     @Scheduled(cron = "0/5 * * * * *")
     public void task(){
         threadPoolExecutors.values().stream().map(executor -> {
-            String name = executor.getName();
-            return name+"-Thread-Pool"
-                    + ", activeCount:" + executor.getActiveCount()
-                    + ", poolSize:" + executor.getPoolSize()
-                    + ", queueSize:" + executor.getQueue().size()
-                    + ", completedTaskCount:" + executor.getCompletedTaskCount()
-                    + ", queueFullWarning:" + executor.getQueueFullWarning()
-                    + ", waitTimeoutCount:" + executor.getWaitTimeoutCount()
-                    + ", execTimeoutCount:" + executor.getExecTimeoutCount()
-                    + ", totalExecTime:" + executor.getTotalExecTime()
-                    + ", totalWaitTime:" + executor.getTotalWaitTime()
-                    + ", coreSize:" + executor.getCorePoolSize()
-                    + ", maxSize:" + executor.getMaximumPoolSize();
+            ThreadPoolInfo threadPoolInfo = new ThreadPoolInfo(executor.getKey(), executor.getName(), executor.getQueueFullWarning(),
+                    executor.getQueue().size(), executor.getQueueTotalSize(), executor.getQueueWarningRatio(), executor.getWaitTimeoutCount(), executor.getExecTimeoutCount(),
+                    executor.getTotalExecTime(), executor.getTotalWaitTime(), executor.getCorePoolSize(), executor.getMaximumPoolSize(),
+                    executor.getCompletedTaskCount(), executor.getActiveCount());
+            return threadPoolInfo.toString();
 
         }).forEach(logDataConsumer);
     }

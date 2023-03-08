@@ -16,7 +16,11 @@ public class ThreadPoolExecutorDecorator extends ThreadPoolExecutor {
     private String name;
 
     /** 任务队列长度阈值 */
-    private int queueSize;
+    private int queueWarningSize;
+    /**  队列总长度 */
+    private int queueTotalSize;
+    /** 任务队列使用比例阈值 */
+    private double queueWarningRatio = 0.75f;
     /** 任务等待时长阈值，单位毫秒 */
     private long waitTimeout;
     /** 任务执行时间阈值，单位毫秒 */
@@ -34,12 +38,17 @@ public class ThreadPoolExecutorDecorator extends ThreadPoolExecutor {
     private final AtomicLong totalWaitTime = new AtomicLong(0);
 
 
-    protected ThreadPoolExecutorDecorator(String key, String name, int queueSize,long waitTimeout,long execTimeout,
-                                          int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+    protected ThreadPoolExecutorDecorator(String key, String name, Double queueWarningRatio, long waitTimeout, long execTimeout,
+                                          int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
+                                          BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
         this.key = key;
         this.name = name;
-        this.queueSize = queueSize;
+        this.queueTotalSize = workQueue.remainingCapacity();
+        if (queueWarningRatio != null) {
+            this.queueWarningRatio = queueWarningRatio;
+        }
+        this.queueWarningSize = (int) (workQueue.size() / this.queueWarningRatio);
         this.waitTimeout = waitTimeout;
         this.execTimeout = execTimeout;
         ThreadPoolExecutorMonitor.add(key, this);
@@ -50,7 +59,7 @@ public class ThreadPoolExecutorDecorator extends ThreadPoolExecutor {
     public void execute(Runnable command) {
         super.execute(new RunnableMonitorDecorator(command));
         //判断队列大小
-        if (getQueue().size() > queueSize) {
+        if (getQueue().size() > queueWarningSize) {
             queueFullWarning.set(true);
         }
     }
@@ -89,12 +98,8 @@ public class ThreadPoolExecutorDecorator extends ThreadPoolExecutor {
         this.name = name;
     }
 
-    public int getQueueSize() {
-        return queueSize;
-    }
-
-    public void setQueueSize(int queueSize) {
-        this.queueSize = queueSize;
+    public int getQueueWarningSize() {
+        return queueWarningSize;
     }
 
     public long getWaitTimeout() {
@@ -117,19 +122,47 @@ public class ThreadPoolExecutorDecorator extends ThreadPoolExecutor {
         return queueFullWarning.getAndSet(false);
     }
 
-    public AtomicInteger getWaitTimeoutCount() {
-        return waitTimeoutCount;
+    public Integer getWaitTimeoutCount() {
+        return waitTimeoutCount.get();
     }
 
-    public AtomicInteger getExecTimeoutCount() {
-        return execTimeoutCount;
+    public Integer getExecTimeoutCount() {
+        return execTimeoutCount.get();
     }
 
-    public AtomicLong getTotalExecTime() {
-        return totalExecTime;
+    public Long getTotalExecTime() {
+        return totalExecTime.get();
     }
 
-    public AtomicLong getTotalWaitTime() {
-        return totalWaitTime;
+    public Long getTotalWaitTime() {
+        return totalWaitTime.get();
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setQueueWarningSize(int queueWarningSize) {
+        this.queueWarningSize = queueWarningSize;
+    }
+
+    public int getQueueTotalSize() {
+        return queueTotalSize;
+    }
+
+    public void setQueueTotalSize(int queueTotalSize) {
+        this.queueTotalSize = queueTotalSize;
+    }
+
+    public double getQueueWarningRatio() {
+        return queueWarningRatio;
+    }
+
+    public void setQueueWarningRatio(double queueWarningRatio) {
+        if (queueWarningRatio <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.queueWarningSize = (int) (getQueue().size()/queueWarningRatio);
+        this.queueWarningRatio = queueWarningRatio;
     }
 }

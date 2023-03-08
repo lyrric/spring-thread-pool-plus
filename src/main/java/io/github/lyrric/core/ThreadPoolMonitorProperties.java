@@ -16,8 +16,8 @@ public class ThreadPoolMonitorProperties implements InitializingBean {
         private String key;
         /** 线程池名称 */
         private String name;
-        /** 任务队列长度阈值 */
-        private int queueSize;
+        /** 任务队列使用比例阈值 */
+        private Double queueWarningRatio;
         /** 任务等待时长阈值，单位毫秒 */
         private long waitTimeout;
         /** 任务执行时间阈值，单位毫秒 */
@@ -59,12 +59,12 @@ public class ThreadPoolMonitorProperties implements InitializingBean {
             this.maximumPoolSize = maximumPoolSize;
         }
 
-        public int getQueueSize() {
-            return queueSize;
+        public Double getQueueWarningRatio() {
+            return queueWarningRatio;
         }
 
-        public void setQueueSize(int queueSize) {
-            this.queueSize = queueSize;
+        public void setQueueWarningRatio(Double queueWarningRatio) {
+            this.queueWarningRatio = queueWarningRatio;
         }
 
         public long getWaitTimeout() {

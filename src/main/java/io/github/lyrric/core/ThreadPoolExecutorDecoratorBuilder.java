@@ -8,8 +8,8 @@ public class ThreadPoolExecutorDecoratorBuilder {
     private String key;
     /** 线程池名称 */
     private String name;
-    /** 任务队列长度阈值 */
-    private int queueSize;
+    /** 任务队列长度使用占比阈值 */
+    private Double queueWarningRatio;
     /** 任务等待时长阈值，单位毫秒 */
     private long waitTimeout;
     /** 任务执行时间阈值，单位毫秒 */
@@ -59,8 +59,8 @@ public class ThreadPoolExecutorDecoratorBuilder {
         return this;
     }
 
-    public ThreadPoolExecutorDecoratorBuilder queueSize(int queueSize) {
-        this.queueSize = queueSize;
+    public ThreadPoolExecutorDecoratorBuilder queueWarningRatio(Double queueWarningRatio) {
+        this.queueWarningRatio = queueWarningRatio;
         return this;
     }
 
@@ -85,7 +85,7 @@ public class ThreadPoolExecutorDecoratorBuilder {
     }
 
     public ThreadPoolExecutorDecorator build() {
-        return new ThreadPoolExecutorDecorator(key, name, queueSize, waitTimeout, execTimeout, corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+        return new ThreadPoolExecutorDecorator(key, name, queueWarningRatio, waitTimeout, execTimeout, corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
                 threadFactory == null ? Executors.defaultThreadFactory() : threadFactory,
                 handler == null ? defaultHandler : handler);
     }

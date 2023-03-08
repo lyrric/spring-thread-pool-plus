@@ -5,14 +5,14 @@ import io.github.lyrric.core.ThreadPoolExecutorDecorator;
 import io.github.lyrric.task.MyTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TestController {
@@ -24,13 +24,13 @@ public class TestController {
             .corePoolSize(5)
             .maximumPoolSize(20)
             .key("test")
-            .name("test")
-            .queueSize(25)
-            .execTimeout(2000)
-            .waitTimeout(3000)
+            .name("kafka")
+            .queueWarningRatio(0.6d)
+            .execTimeout(3000)
+            .waitTimeout(5000)
             .keepAliveTime(30)
             .unit(TimeUnit.SECONDS)
-            .workQueue(new ArrayBlockingQueue<>(30))
+            .workQueue(new ArrayBlockingQueue<>(100))
             .build();
 
 
@@ -38,7 +38,7 @@ public class TestController {
     @ResponseBody
     public String test(@PathVariable final Integer count, @PathVariable final long sleepTime) {
         for (int i = 0; i < count; i++) {
-            threadPoolExecutor.submit(new MyTask(sleepTime));
+            threadPoolExecutor.submit(new MyTask());
         }
         return "success";
     }
