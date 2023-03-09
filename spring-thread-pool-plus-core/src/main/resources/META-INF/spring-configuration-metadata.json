@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "thread.pool.plus",
+      "type": "io.github.lyrric.threadplus.ThreadPoolPlusProperties",
+      "sourceType": "io.github.lyrric.threadplus.ThreadPoolPlusProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "thread.pool.plus.config",
+      "type": "java.util.List<io.github.lyrric.threadplus.ThreadPoolPlusProperties$Config>",
+      "sourceType": "io.github.lyrric.threadplus.ThreadPoolPlusProperties"
+    }
+  ],
+  "hints": []
+}
