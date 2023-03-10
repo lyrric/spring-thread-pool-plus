@@ -1,6 +1,6 @@
 # 动态线程池
 - 实时监测线程池的各项指标信息
-- 通过nacos动态设置线程池参数
+- 通过配置中心（如nacos）可以动态设置线程池参数
 ## 与Grafana结合可以实现如下图效果
 <img src="images/1.png" alt="任务完成情况">
 <img src="images/2.png" alt="线程状况">
