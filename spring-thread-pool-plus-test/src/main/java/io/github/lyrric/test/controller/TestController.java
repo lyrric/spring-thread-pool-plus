@@ -1,13 +1,13 @@
 package io.github.lyrric.test.controller;
 
 import io.github.lyrric.test.TestTask;
+import io.github.lyrric.threadplus.decorator.LinkedBlockQueueDecorator;
 import io.github.lyrric.threadplus.decorator.ThreadPoolExecutorPlus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +24,7 @@ public class TestController {
             .waitTimeout(5000)
             .keepAliveTime(30)
             .unit(TimeUnit.SECONDS)
-            .workQueue(new ArrayBlockingQueue<>(30))
+            .workQueue(new LinkedBlockQueueDecorator<>(30))
             .build();
 
 

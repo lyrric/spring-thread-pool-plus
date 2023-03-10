@@ -18,14 +18,17 @@ public class ThreadPoolPlusProperties implements InitializingBean {
         private String name;
         /** 任务队列使用比例阈值 */
         private Double queueWarningRatio;
+        /** 队列容量 */
+        private int queueCapacity;
+
         /** 任务等待时长阈值，单位毫秒 */
         private long waitTimeout;
         /** 任务执行时间阈值，单位毫秒 */
         private long execTimeout;
         /** 核心线程池数量 */
-        private Integer corePoolSize;
+        private int corePoolSize;
         /** 最大线程池数量 */
-        private Integer maximumPoolSize;
+        private int maximumPoolSize;
 
         public String getName() {
             return name;
@@ -41,22 +44,6 @@ public class ThreadPoolPlusProperties implements InitializingBean {
 
         public void setKey(String key) {
             this.key = key;
-        }
-
-        public Integer getCorePoolSize() {
-            return corePoolSize;
-        }
-
-        public void setCorePoolSize(Integer corePoolSize) {
-            this.corePoolSize = corePoolSize;
-        }
-
-        public Integer getMaximumPoolSize() {
-            return maximumPoolSize;
-        }
-
-        public void setMaximumPoolSize(Integer maximumPoolSize) {
-            this.maximumPoolSize = maximumPoolSize;
         }
 
         public Double getQueueWarningRatio() {
@@ -81,6 +68,30 @@ public class ThreadPoolPlusProperties implements InitializingBean {
 
         public void setExecTimeout(long execTimeout) {
             this.execTimeout = execTimeout;
+        }
+
+        public int getQueueCapacity() {
+            return queueCapacity;
+        }
+
+        public void setQueueCapacity(int queueCapacity) {
+            this.queueCapacity = queueCapacity;
+        }
+
+        public void setCorePoolSize(int corePoolSize) {
+            this.corePoolSize = corePoolSize;
+        }
+
+        public void setMaximumPoolSize(int maximumPoolSize) {
+            this.maximumPoolSize = maximumPoolSize;
+        }
+
+        public int getCorePoolSize() {
+            return corePoolSize;
+        }
+
+        public int getMaximumPoolSize() {
+            return maximumPoolSize;
         }
     }
 

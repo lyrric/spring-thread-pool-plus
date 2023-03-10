@@ -12,10 +12,8 @@ public class ThreadPoolExecutorPlus extends ThreadPoolExecutor {
     /** 线程池名称 */
     private String name;
 
-    /** 任务队列长度阈值 */
-    private int queueWarningSize;
-    /**  队列总长度 */
-    private int queueTotalSize;
+    /**  队列容量 */
+    private int queueCapacity;
     /** 任务队列使用比例阈值 */
     private double queueWarningRatio = 0.75f;
     /** 任务等待时长阈值，单位毫秒 */
@@ -39,11 +37,10 @@ public class ThreadPoolExecutorPlus extends ThreadPoolExecutor {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
         this.key = key;
         this.name = name;
-        this.queueTotalSize = workQueue.remainingCapacity();
+        this.queueCapacity = workQueue.remainingCapacity();
         if (queueWarningRatio != null) {
             this.queueWarningRatio = queueWarningRatio;
         }
-        this.queueWarningSize = (int) (workQueue.size() / this.queueWarningRatio);
         this.waitTimeout = waitTimeout;
         this.execTimeout = execTimeout;
         ThreadPoolExecutorManager.add(key, this);
@@ -125,8 +122,8 @@ public class ThreadPoolExecutorPlus extends ThreadPoolExecutor {
         return key;
     }
 
-    public int getQueueTotalSize() {
-        return queueTotalSize;
+    public int getQueueCapacity() {
+        return queueCapacity;
     }
 
 
@@ -138,7 +135,14 @@ public class ThreadPoolExecutorPlus extends ThreadPoolExecutor {
         if (queueWarningRatio <= 0) {
             throw new IllegalArgumentException();
         }
-        this.queueWarningSize = (int) (getQueue().size()/queueWarningRatio);
         this.queueWarningRatio = queueWarningRatio;
+    }
+
+    public void setQueueCapacity(int queueCapacity) {
+        BlockingQueue<Runnable> queue = getQueue();
+        if (queue instanceof LinkedBlockQueueDecorator) {
+            ((LinkedBlockQueueDecorator<Runnable>) queue).setCapacity(queueCapacity);
+            this.queueCapacity = queueCapacity;
+        }
     }
 }

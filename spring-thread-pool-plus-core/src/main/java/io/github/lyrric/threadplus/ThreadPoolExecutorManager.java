@@ -37,7 +37,7 @@ public class ThreadPoolExecutorManager {
     public void task(){
         threadPoolExecutors.values().stream().map(executor -> {
             ThreadPoolInfo threadPoolInfo = new ThreadPoolInfo(executor.getKey(), executor.getName(),
-                    executor.getQueue().size(), executor.getQueueTotalSize(), executor.getQueueWarningRatio(), executor.getWaitTimeoutCount(), executor.getExecTimeoutCount(),
+                    executor.getQueue().size(), executor.getQueueCapacity(), executor.getQueueWarningRatio(), executor.getWaitTimeoutCount(), executor.getExecTimeoutCount(),
                     executor.getTotalExecTime(), executor.getTotalWaitTime(), executor.getCorePoolSize(), executor.getMaximumPoolSize(),
                     executor.getCompletedTaskCount(), executor.getActiveCount(),executor.getWaitTimeout(),  executor.getExecTimeout());
             return threadPoolInfo;
@@ -59,7 +59,7 @@ public class ThreadPoolExecutorManager {
                             threadPool.setExecTimeout(poolProperties.getExecTimeout());
                             threadPool.setWaitTimeout(poolProperties.getWaitTimeout());
                             threadPool.setQueueWarningRatio(poolProperties.getQueueWarningRatio());
-
+                            threadPool.setQueueCapacity(poolProperties.getQueueCapacity());
                         });
             });
         }

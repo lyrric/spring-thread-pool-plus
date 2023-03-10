@@ -1,7 +1,5 @@
 package io.github.lyrric.threadplus;
 
-import java.time.LocalDateTime;
-
 public class ThreadPoolInfo {
     /** 线程池唯一标识 */
     private String key;
@@ -15,6 +13,8 @@ public class ThreadPoolInfo {
     private Integer queueWarningSize;
     /** 任务队列使用数量 */
     private Integer queueUseSize ;
+    /** 队列容量 */
+    private Integer queueCapacity;
 
 
     /** 任务等待时间超过阈值的任务数量 */
@@ -39,8 +39,6 @@ public class ThreadPoolInfo {
     private Integer corePoolSize;
     /** 最大线程池数量 */
     private Integer maximumPoolSize;
-    /** 队列总长度 */
-    private Integer queueTotalSize;
     /** 任务等待时长阈值，单位毫秒 */
     private Long waitTimeout;
     /** 任务执行时间阈值，单位毫秒 */
@@ -51,8 +49,8 @@ public class ThreadPoolInfo {
     }
 
 
-    public ThreadPoolInfo(String key, String name, Integer queueUseSize, Integer queueTotalSize, Double queueWarningRatio,
-                          Long waitTimeoutCount, Long execTimeoutCount, Long totalExecTime,Long totalWaitTime,
+    public ThreadPoolInfo(String key, String name, Integer queueUseSize, Integer queueCapacity, Double queueWarningRatio,
+                          Long waitTimeoutCount, Long execTimeoutCount, Long totalExecTime, Long totalWaitTime,
                           Integer corePoolSize, Integer maximumPoolSize, Long completedTaskCount, Integer activeCount,
                           long waitTimeout, long execTimeout) {
         this.key = key;
@@ -68,10 +66,10 @@ public class ThreadPoolInfo {
         this.activeCount = activeCount;
         this.corePoolSize = corePoolSize;
         this.maximumPoolSize = maximumPoolSize;
-        this.queueTotalSize = queueTotalSize;
+        this.queueCapacity = queueCapacity;
         this.queueUseSize = queueUseSize;
         this.queueWarningRatio = queueWarningRatio;
-        this.queueWarningSize = (int)(queueTotalSize * queueWarningRatio);
+        this.queueWarningSize = (int)(queueCapacity * queueWarningRatio);
         this.queueFullWarning = queueUseSize > queueWarningSize;
         this.completedTaskCount = completedTaskCount;
         this.waitTimeout = waitTimeout;
@@ -98,7 +96,7 @@ public class ThreadPoolInfo {
                 ", activeCount=" + activeCount +
                 ", corePoolSize=" + corePoolSize +
                 ", maximumPoolSize=" + maximumPoolSize +
-                ", queueTotalSize=" + queueTotalSize +
+                ", queueTotalSize=" + queueCapacity +
                 ", waitTimeout=" + waitTimeout +
                 ", execTimeout=" + execTimeout +
                 ", createTime=" + createTime +
@@ -145,12 +143,12 @@ public class ThreadPoolInfo {
         this.queueUseSize = queueUseSize;
     }
 
-    public Integer getQueueTotalSize() {
-        return queueTotalSize;
+    public Integer getQueueCapacity() {
+        return queueCapacity;
     }
 
-    public void setQueueTotalSize(Integer queueTotalSize) {
-        this.queueTotalSize = queueTotalSize;
+    public void setQueueCapacity(Integer queueCapacity) {
+        this.queueCapacity = queueCapacity;
     }
 
     public Double getQueueWarningRatio() {
