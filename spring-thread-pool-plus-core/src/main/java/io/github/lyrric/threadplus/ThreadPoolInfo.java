@@ -9,11 +9,14 @@ public class ThreadPoolInfo {
     private String name;
     /** 任务队列是否长度超过阈值 */
     private Boolean queueFullWarning ;
+    /** 任务队列使用比例阈值 */
+    private Double queueWarningRatio;
+    /** 任务队列预警长度 */
+    private Integer queueWarningSize;
     /** 任务队列使用数量 */
     private Integer queueUseSize ;
 
-    /** 任务队列使用比例阈值 */
-    private Double queueWarningRatio;
+
     /** 任务等待时间超过阈值的任务数量 */
     private Long waitTimeoutCount ;
     /** 任务执行超过阈值的任务数量 */
@@ -68,7 +71,8 @@ public class ThreadPoolInfo {
         this.queueTotalSize = queueTotalSize;
         this.queueUseSize = queueUseSize;
         this.queueWarningRatio = queueWarningRatio;
-        this.queueFullWarning = queueUseSize > (queueTotalSize * queueWarningRatio);
+        this.queueWarningSize = (int)(queueTotalSize * queueWarningRatio);
+        this.queueFullWarning = queueUseSize > queueWarningSize;
         this.completedTaskCount = completedTaskCount;
         this.waitTimeout = waitTimeout;
         this.execTimeout = execTimeout;
@@ -81,8 +85,9 @@ public class ThreadPoolInfo {
                 "key='" + key + '\'' +
                 ", name='" + name + '\'' +
                 ", queueFullWarning=" + queueFullWarning +
-                ", queueUseSize=" + queueUseSize +
                 ", queueWarningRatio=" + queueWarningRatio +
+                ", queueWarningSize=" + queueWarningSize +
+                ", queueUseSize=" + queueUseSize +
                 ", waitTimeoutCount=" + waitTimeoutCount +
                 ", execTimeoutCount=" + execTimeoutCount +
                 ", totalExecTime=" + totalExecTime +
@@ -98,6 +103,14 @@ public class ThreadPoolInfo {
                 ", execTimeout=" + execTimeout +
                 ", createTime=" + createTime +
                 '}';
+    }
+
+    public Integer getQueueWarningSize() {
+        return queueWarningSize;
+    }
+
+    public void setQueueWarningSize(Integer queueWarningSize) {
+        this.queueWarningSize = queueWarningSize;
     }
 
     public String getKey() {

@@ -1,11 +1,9 @@
 package io.github.lyrric.test.config;
 
-import io.github.lyrric.test.model.EsThreadPoolInfo;
 import io.github.lyrric.test.service.EsService;
 import io.github.lyrric.threadplus.ThreadPoolInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,8 +24,6 @@ public class EsThreadPoolInfoConsumer implements Consumer<ThreadPoolInfo> {
     @Override
     public void accept(ThreadPoolInfo threadPoolInfo) {
         log.info(threadPoolInfo.toString());
-        EsThreadPoolInfo data = new EsThreadPoolInfo();
-        BeanUtils.copyProperties(threadPoolInfo, data);
         try {
             esService.add(threadPoolInfo);
         } catch (IOException e) {

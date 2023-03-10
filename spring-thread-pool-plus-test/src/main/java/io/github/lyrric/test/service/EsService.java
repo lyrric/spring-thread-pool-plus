@@ -2,7 +2,6 @@ package io.github.lyrric.test.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.IndexRequest;
-import io.github.lyrric.test.model.EsThreadPoolInfo;
 import io.github.lyrric.threadplus.ThreadPoolInfo;
 import org.springframework.stereotype.Service;
 
