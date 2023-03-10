@@ -1,8 +1,11 @@
 package io.github.lyrric.threadplus;
 
 import io.github.lyrric.threadplus.decorator.ThreadPoolExecutorPlus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.annotation.PreDestroy;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +14,7 @@ import java.util.function.Consumer;
 
 public class ThreadPoolExecutorManager {
 
+    private final Logger log = LoggerFactory.getLogger(ThreadPoolExecutorManager.class);
     private static final Map<String, ThreadPoolExecutorPlus> threadPoolExecutors = new ConcurrentHashMap<>();
     /**
      * 日志存储器
@@ -59,6 +63,12 @@ public class ThreadPoolExecutorManager {
                         });
             });
         }
-
+  }
+  @PreDestroy
+  public void shutdownGracefully(){
+      threadPoolExecutors.values().forEach(executor ->{
+          log.info("{}-thread-pool shutdown gracefully", executor.getName());
+          executor.shutdown();
+      });
   }
 }

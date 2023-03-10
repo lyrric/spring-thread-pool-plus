@@ -14,8 +14,6 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class TestController {
 
-
-
     ExecutorService threadPoolExecutor = ThreadPoolExecutorPlus.builder()
             .corePoolSize(5)
             .maximumPoolSize(20)
@@ -26,7 +24,7 @@ public class TestController {
             .waitTimeout(5000)
             .keepAliveTime(30)
             .unit(TimeUnit.SECONDS)
-            .workQueue(new ArrayBlockingQueue<>(100))
+            .workQueue(new ArrayBlockingQueue<>(30))
             .build();
 
 
