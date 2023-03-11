@@ -3,10 +3,12 @@
 #    plus:
 #      config:
 #        - key: test
+#          name: kafka
 #          queue-warning-ratio: 0.6
 #          wait-timeout: 2000
 #          exec-timeout: 5000
 #          core-pool-size: 5
 #          maximum-pool-size: 12
-
-
+#          queue-capacity: 120
+#
+#
